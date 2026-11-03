@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>The Timeline</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+    <h1>The Timeline</h1>
+
+    <% posts.forEach(post => { %>
+        <div class="post">
+            <h3><%= post.name %></h3>
+            <p class="date"><%= post.createdAt %></p>
+            <p><%= post.message %></p>
+        </div>
+    <% }) %>
+
+</body>
+</html>
