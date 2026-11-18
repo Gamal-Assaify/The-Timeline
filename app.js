@@ -1,36 +1,38 @@
-const express = require("express");
+// get the express package
+const express = require('express');
 const app = express();
 
-app.set("view engine", "ejs");
-app.use(express.static("public"));
+//Port number
+const port = 3000;
 
-const data = [
-  {
-    name: "Michael Choi",
-    createdAt: "23-01-2013",
-    message:
-      "This is my message. This is my message. This is my message. This is my message."
-  },
-  {
-    name: "John Smith",
-    createdAt: "15-05-2014",
-    message:
-      "Learning Node.js and Express is fun!"
-  },
-  {
-    name: "Sarah Johnson",
-    createdAt: "02-07-2016",
-    message:
-      "Welcome to my timeline post."
-  }
-];
+//Connect to the database and then start listening to app/server after that 
+async function startApp() {
+    try {
+        await require('./config/database');
+        console.log('Database is connected');
+        app.listen(port, () => {
+            console.log(`Server is running on port ${port}`);
+        });
+    } catch (err) {
+        console.error('Failed to connect to the database; app was not started.', err);
+        process.exitCode = 1;
+    }
+}
+startApp();
 
-app.get("/", (req, res) => {
-  res.render("index", { posts: data });
-});
+//importing routes
+const routes = require('./config/routes');
 
-const PORT = 3000;
+//EJS engine setup
+app.set('view engine','ejs');
 
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-});
+//static files css images are stored in public folder and 
+//we are telling express to use public folder as static folder
+app.use(express.static('public'));
+
+//form inputs to be encoded /express 
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
+
+//using 'routes
+app.use('/',routes);

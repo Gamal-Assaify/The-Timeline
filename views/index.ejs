@@ -1,20 +1,40 @@
 <!DOCTYPE html>
-<html>
-<head>
-    <title>The Timeline</title>
-    <link rel="stylesheet" href="/style.css">
-</head>
+<html lang="en">
+<%- include('./partials/head.ejs')%>
 <body>
-
-    <h1>The Timeline</h1>
-
-    <% posts.forEach(post => { %>
-        <div class="post">
-            <h3><%= post.name %></h3>
-            <p class="date"><%= post.createdAt %></p>
-            <p><%= post.message %></p>
+    <%- include ('./partials/nav.ejs')%>
+    <div class="container">
+        <div class="newPost">
+           
+            <form action="./createNewPost" method="POST">
+                <label>Name</label>
+                <input class="newPostName" name="name" placeholder="Your Name">
+                <lebel> Post a message</lebel>
+                <textarea class="newPostText" name="message" placeholder="Start writing your Post"></textarea>
+                <button class="newPostBtn">Post a message</button>
+            </form>   
+             <% if(error) {%>
+                <p class="error"><%= error%></p>
+            <%}%>
         </div>
-    <% }) %>
-
+        <ul class ="msg_container">
+            <% if (comments.length >0) { %>
+                <% comments.forEach(comment => {%>
+                    <li>
+                        <p class="msgName"><%=comment.name%> - <%=(comment.createdAt).toDateString().slice(3)%></p>
+                        <p class="msgContent"><%=comment.message%> <a href="./showAPost/<%=comment._id%>">See More</a></p>
+                        
+                    </li>
+                <% }); %>
+            <%} else {%>
+                <%if (error) {%>
+                    <p> Try again with required message length...</p>
+                <%} else {%>
+                    <p> No comments to display ....</p>
+                <% }%>
+            <%} %>
+        </ul>
+    </div>
+    <%- include('./partials/footer.ejs'); %>
 </body>
 </html>
